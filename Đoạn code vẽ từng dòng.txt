@@ -1,0 +1,16 @@
+﻿void drawFixedImage(int x, int y, int w, int h, const uint16_t* img) {
+  uint16_t line_buffer[w];
+  for (int i = 0; i < h; i++) {
+    for (int j = 0; j < w; j++) {
+      // Đọc dữ liệu từ Flash 
+      uint16_t color = pgm_read_word(&img[i * w + j]);
+      // Đảo byte màu để sửa lỗi phần cứng
+      line_buffer[j] = (color << 8) | (color >> 8);
+    }
+    // Vẽ từng dòng một
+    tft.pushImage(x, y + i, w, 1, line_buffer);
+    
+    // THÊM DELAY NẾU MUỐN THẤY HIỆU ỨNG QUÉT CHẬM:
+     //delay(5); // Nếu muốn quét nhanh tự nhiên thì xóa dòng delay này đi nhé
+  }
+}
